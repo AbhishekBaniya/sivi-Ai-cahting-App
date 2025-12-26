@@ -1,5 +1,5 @@
-import '../../../config/res/dims.dart';
 import '../../../core/utils/imports_utils.dart';
+import 'app_text_widget.dart';
 
 PreferredSizeWidget segmentedAppBar({
   required int selectedIndex,
@@ -17,7 +17,7 @@ PreferredSizeWidget segmentedAppBar({
 
         return Container(
           width: width,
-          height: 44,
+          height: 56,
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
             color: Colors.grey.shade200,
@@ -43,58 +43,6 @@ PreferredSizeWidget segmentedAppBar({
   );
 }
 
-PreferredSizeWidget customAppBar() => PreferredSize(
-  preferredSize: Size(double.infinity, kToolbarHeight),
-  child: SizedBox(
-    height: Dim.doubleEight * Dim.doubleSeven,
-    child: Container(
-      decoration: BoxDecoration(
-        //borderRadius: BorderRadius.circular(Dim.doubleFive * Dim.doubleTen),
-        //color: Colors.amberAccent,
-      ),
-      alignment: Alignment.center,
-      child: Container(
-        alignment: Alignment.center,
-        width: 240,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dim.doubleFive * Dim.doubleTen),
-          color: Colors.pink,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(
-                    Dim.doubleFive * Dim.doubleTen,
-                  ),
-                ),
-                height: 50,
-                child: Text("Users"),
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(
-                  Dim.doubleFive * Dim.doubleTen,
-                ),
-              ),
-              height: 50,
-              child: Text("Chat History"),
-            ),
-          ],
-        ),
-      ),
-    ),
-  ),
-);
-
 Widget _segmentItem({
   required String text,
   required bool isSelected,
@@ -103,8 +51,8 @@ Widget _segmentItem({
   return Expanded(
     child: GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+      child: Container(
+        //duration: const Duration(milliseconds: 200),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected ? Colors.white : Colors.transparent,
@@ -119,12 +67,16 @@ Widget _segmentItem({
                 ]
               : [],
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.black : Colors.grey.shade600,
-          ),
+        child: AppRichTextWidget().buildComplexRichText(
+          textSpans: [
+            TextSpan(
+              text: text,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.black : Colors.grey.shade600,
+              ),
+            ),
+          ],
         ),
       ),
     ),

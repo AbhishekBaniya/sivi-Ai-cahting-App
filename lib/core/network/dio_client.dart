@@ -117,7 +117,8 @@ class DioClient {
   DioClient._internal() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://jsonplaceholder.typicode.com/',
+        baseUrl: 'https://dummyjson.com/',
+        //baseUrl: 'https://jsonplaceholder.typicode.com/',
         connectTimeout: const Duration(seconds: 5), // Connection timeout
         receiveTimeout: const Duration(seconds: 3), // Receive timeout
         headers: {

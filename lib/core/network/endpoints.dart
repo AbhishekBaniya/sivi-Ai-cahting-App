@@ -1,4 +1,5 @@
 class EndPoints {
   EndPoints._();
-  static get user => 'users';
+  static get user => 'comments';
+  //static get user => 'users';
 }

@@ -7,9 +7,14 @@ class PortfolioController extends GetxController {
   final GetPortfolio getPortfolio;
   PortfolioController({required this.getPortfolio});
 
-  var portfolioItems = <PortfolioEntity>[].obs;
+  final portfolio = Rxn<PortfolioEntity>();
+
+  //var portfolioItems = <PortfolioEntity>[].obs;
   var isLoading = true.obs;
   var hasError = false.obs;
+  var selectedIndex = 0.obs;
+  var bottomNavSelectedIndex = 0.obs;
+  var isOnline = true.obs;
 
   @override
   void onInit() {
@@ -32,6 +37,23 @@ class PortfolioController extends GetxController {
 
   void fetchPortfolio() async {
     isLoading(true);
+
+    final result = await getPortfolio();
+
+    result.fold(
+      (error) {
+        hasError(true);
+      },
+      (success) {
+        portfolio.value = success;
+      },
+    );
+
+    isLoading(false);
+  }
+
+  /*void fetchPortfolio() async {
+    isLoading(true);
     final result = await getPortfolio();
     result.fold(
       (error) {
@@ -42,5 +64,19 @@ class PortfolioController extends GetxController {
       },
     );
     isLoading(false);
+  }*/
+
+  // String getFirstLetter(String text) {
+  //   final trimmed = text.trimLeft();
+  //   if (trimmed.isEmpty) return '?';
+  //   return trimmed[0].toUpperCase();
+  // }
+
+  String getFirstLetter(String value) {
+    final trimmed = value.trim();
+
+    if (trimmed.isEmpty) return '?';
+
+    return trimmed[0].toUpperCase();
   }
 }

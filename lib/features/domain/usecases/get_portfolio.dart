@@ -22,7 +22,7 @@ class GetPortfolio {
   GetPortfolio(this.repository);
 
   /// Fetches a portfolio, returning either a [Failure] or a list of [PortfolioEntity].
-  Future<Either<Failure, List<PortfolioEntity>>> call() async {
+  Future<Either<Failure, PortfolioEntity>> call() async {
     try {
       // Attempt to fetch the portfolio from the repository
       return await repository.getPortfolio();

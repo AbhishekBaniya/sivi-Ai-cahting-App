@@ -6,7 +6,7 @@ import '../../../../core/utils/imports_utils.dart';
 import '../../model/portfolio_model.dart';
 
 abstract class PortfolioRemoteDataSource {
-  Future<List<PortfolioModel>> getPortfolio({required String endPoint});
+  Future<PortfolioModel> getPortfolio({required String endPoint});
 }
 
 class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
@@ -15,9 +15,12 @@ class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
   PortfolioRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<List<PortfolioModel>> getPortfolio({required String endPoint}) async {
+  Future<PortfolioModel> getPortfolio({required String endPoint}) async {
     try {
-      final response = await dioClient.getRequest(endPoint);
+      final response = await dioClient.getRequest(
+        endPoint,
+        queryParams: {'limit': 340},
+      );
       //dioClient.logRequest('GET', endPoint);
       //dioClient.logResponse(endPoint, response);
       ApiLogTracer().logResponse(
@@ -25,9 +28,18 @@ class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
         response.data,
         DateTime.now().difference(DateTime.now()),
       );
-      return (response.data as List)
-          .map((item) => PortfolioModel.fromJson(item))
-          .toList(growable: false);
+
+      // final data = response.data as Map<String, dynamic>;
+      // final list = data['comments'] as List;
+      //
+      // return (list as List)
+      //     .map((item) => PortfolioModel.fromJson(item))
+      //     .toList(growable: false);
+
+      return PortfolioModel.fromJson(response.data);
+      // return (response.data as List)
+      //     .map((item) => PortfolioModel.fromJson(item))
+      //     .toList(growable: false);
     } catch (error) {
       Logger().error('Failed to fetch data: $error');
       throw ServerException();
