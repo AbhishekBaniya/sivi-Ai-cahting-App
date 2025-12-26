@@ -8,7 +8,7 @@ class AppParentWidget extends StatefulWidget {
       safeLeft,
       safeRight,
       resizeToAvoidBottomInset;
-  final Widget? body, bottomNavigationBar;
+  final Widget? body, bottomNavigationBar, fab;
 
   const AppParentWidget({
     super.key,
@@ -20,6 +20,7 @@ class AppParentWidget extends StatefulWidget {
     this.resizeToAvoidBottomInset,
     this.body,
     this.bottomNavigationBar,
+    this.fab,
   });
 
   @override
@@ -122,16 +123,8 @@ class _AppParentWidgetState extends State<AppParentWidget> {
         //   ),
         // ),
         body: widget.body,
-        bottomNavigationBar:
-            widget.bottomNavigationBar ??
-            CustomBottomNav(
-              //currentIndex: currentIndex,
-              // onTap: (index) {
-              //   setState(() {
-              //     currentIndex = index;
-              //   });
-              // },
-            ),
+        floatingActionButton: widget.fab,
+        bottomNavigationBar: widget.bottomNavigationBar ?? CustomBottomNav(),
       ),
     );
   }

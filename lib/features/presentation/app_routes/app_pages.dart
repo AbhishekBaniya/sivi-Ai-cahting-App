@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mini_chat/features/presentation/pages/chats/chats_screen.dart';
 
 import '../bindings/app_binding.dart';
 import '../pages/portfolio_screen.dart';
@@ -10,6 +11,15 @@ class AppPages {
       title: AppRoutes.home,
       name: AppRoutes.home,
       page: () => PortfolioScreen(),
+      binding: AppBindings(),
+      preventDuplicates: true,
+      popGesture: true,
+      maintainState: true,
+    ),
+    GetPage(
+      title: AppRoutes.chatScreen,
+      name: AppRoutes.chatScreen,
+      page: () => ChatsScreen(),
       binding: AppBindings(),
       preventDuplicates: true,
       popGesture: true,

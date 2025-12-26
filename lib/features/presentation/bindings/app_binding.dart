@@ -7,10 +7,7 @@ import '../../../core/network/dio_client.dart';
 import '../../data/data_source/remote_data_source/portfolio_remote_data_source.dart';
 import '../../data/repositories/portfolio_repository_impl.dart';
 import '../../domain/usecases/get_portfolio.dart';
-import '../controller/auth/app_auth_controller.dart';
-import '../controller/dashboard/dashboard_controller.dart';
 import '../controller/portfolio_controller.dart';
-import '../controller/profile/profile_controller.dart';
 
 class AppBindings extends Bindings {
   @override
@@ -36,30 +33,28 @@ class AppBindings extends Bindings {
     );*/
 
     Get.put(ColorManager());
-// Register DioClient first
+    // Register DioClient first
     Get.lazyPut<DioClient>(() => DioClient());
 
-// Register PortfolioRemoteDataSourceImpl which depends on DioClient
-    Get.lazyPut<PortfolioRemoteDataSourceImpl>(() =>
-        PortfolioRemoteDataSourceImpl(Get.find<DioClient>())
+    // Register PortfolioRemoteDataSourceImpl which depends on DioClient
+    Get.lazyPut<PortfolioRemoteDataSourceImpl>(
+      () => PortfolioRemoteDataSourceImpl(Get.find<DioClient>()),
     );
 
-// Register PortfolioRepositoryImpl which depends on PortfolioRemoteDataSourceImpl
-    Get.lazyPut<PortfolioRepositoryImpl>(() =>
-        PortfolioRepositoryImpl(Get.find<PortfolioRemoteDataSourceImpl>())
+    // Register PortfolioRepositoryImpl which depends on PortfolioRemoteDataSourceImpl
+    Get.lazyPut<PortfolioRepositoryImpl>(
+      () => PortfolioRepositoryImpl(Get.find<PortfolioRemoteDataSourceImpl>()),
     );
 
-// Register GetPortfolio which depends on PortfolioRepositoryImpl
-    Get.lazyPut<GetPortfolio>(() => GetPortfolio(Get.find<PortfolioRepositoryImpl>()));
+    // Register GetPortfolio which depends on PortfolioRepositoryImpl
+    Get.lazyPut<GetPortfolio>(
+      () => GetPortfolio(Get.find<PortfolioRepositoryImpl>()),
+    );
 
-// Register PortfolioController which depends on GetPortfolio
-    Get.lazyPut<PortfolioController>(() => PortfolioController(getPortfolio: Get.find<GetPortfolio>()));
-
-
-    Get.put(AppAuthController());
-    Get.put(ProfileController());
-    Get.put(DashboardController());
-
+    // Register PortfolioController which depends on GetPortfolio
+    Get.lazyPut<PortfolioController>(
+      () => PortfolioController(getPortfolio: Get.find<GetPortfolio>()),
+    );
   }
 
   @override

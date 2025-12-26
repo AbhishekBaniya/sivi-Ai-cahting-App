@@ -1,0 +1,136 @@
+import '../../../../config/res/dims.dart';
+import '../../../../core/utils/imports_utils.dart';
+import '../../controller/portfolio_controller.dart';
+import '../../widgets/app_text_widget.dart';
+import '../../widgets/extension_sizedbox_widget.dart';
+
+class ChatListItem extends StatelessWidget {
+  final String name;
+  final String message;
+  final String time;
+  final int unreadCount;
+
+  ChatListItem({
+    super.key,
+    required this.name,
+    required this.message,
+    required this.time,
+    required this.unreadCount,
+  });
+
+  final PortfolioController controller = Get.put(
+    PortfolioController(getPortfolio: Get.find()),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF02C570),
+                  Color(0xFF02C381),
+                  Color(0xFF02C18D),
+                ],
+              ),
+            ),
+            child: AppRichTextWidget().buildComplexRichText(
+              textSpans: [
+                TextSpan(
+                  text: controller.getFirstLetter(name),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: Dim.doubleTen * Dim.doubleTwo,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          12.widthBox,
+
+          // Name & message
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppRichTextWidget().buildComplexRichText(
+                  textSpans: [
+                    TextSpan(
+                      text: name,
+                      style: TextStyle(
+                        fontSize: Dim.doubleEight * Dim.doubleTwo,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+
+                Dim.doubleFour.heightBox,
+
+                AppRichTextWidget().buildComplexRichText(
+                  textSpans: [
+                    TextSpan(
+                      text: message,
+                      style: TextStyle(
+                        fontSize: Dim.doubleSix * Dim.doubleTwo,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          // Time & unread badge
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                time,
+                style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+              ),
+              const SizedBox(height: 6),
+              if (unreadCount > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF165DFC),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    unreadCount.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
