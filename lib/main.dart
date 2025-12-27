@@ -1,6 +1,8 @@
 //import 'package:firebase_core/firebase_core.dart';
 //import 'package:portfolio/config/firebase_options.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+
 import 'config/res/strings.dart';
 import 'config/res/theme.dart';
 import 'core/utils/bool_manager.dart';
@@ -11,9 +13,27 @@ import 'features/presentation/app_routes/app_navigation_tracer.dart';
 import 'features/presentation/app_routes/app_pages.dart';
 import 'features/presentation/app_routes/app_routes.dart';
 import 'features/presentation/bindings/app_binding.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  /*final uid = await LocalUserService.getUserId();
+  final name = await LocalUserService.getName();
+
+  final ref = FirebaseFirestore.instance.collection('users').doc(uid);
+
+  final snap = await ref.get();
+  if (!snap.exists) {
+    await ref.set({
+      'uid': uid,
+      'name': name,
+      'isOnline': true,
+      'lastSeen': FieldValue.serverTimestamp(),
+    });
+  }*/
+  //FirebaseFirestore.instance.collection('test').add({'connected': true});
   //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   // Get.put(PortfolioRemoteDataSourceImpl(DioClient(),),);
   // Get.put(PortfolioRepositoryImpl(Get.find(),),);
@@ -51,7 +71,7 @@ class MyApp extends StatelessWidget {
       // Set the observer here
       title: Strings.appName,
       initialRoute: AppRoutes.home,
-      //home: PortfolioScreen(),
+      //home: LoginScreen(),
     );
   }
 }

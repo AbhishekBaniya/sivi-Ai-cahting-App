@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "799516898548",
+    "firebase_url": "https://siviminichat101-default-rtdb.firebaseio.com",
+    "project_id": "siviminichat101",
+    "storage_bucket": "siviminichat101.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799516898548:android:37c7750e6718eceeba9aa1",
+        "android_client_info": {
+          "package_name": "com.sivi.ai.mini_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFSj_no8koNs3df6J_VWke0_hCM-8p0Co"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

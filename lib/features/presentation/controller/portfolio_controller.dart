@@ -1,10 +1,11 @@
 import 'package:flutter/rendering.dart';
+import 'package:mini_chat/features/presentation/app_routes/app_navigators.dart';
 
 import '../../../core/utils/app_logger.dart';
 import '../../../core/utils/imports_utils.dart';
-import '../../data/model/chat_model.dart';
 import '../../domain/entities/portfolio_entity.dart';
 import '../../domain/usecases/get_portfolio.dart';
+import '../widgets/animated_dialog_widget.dart';
 
 class PortfolioController extends GetxController {
   final GetPortfolio getPortfolio;
@@ -13,30 +14,15 @@ class PortfolioController extends GetxController {
   final portfolio = Rxn<PortfolioEntity>();
 
   //var portfolioItems = <PortfolioEntity>[].obs;
-  var isLoading = true.obs, isChatLoading = false.obs;
-  var hasError = false.obs, hasErrorChat = false.obs;
+  var isLoading = true.obs;
+  var hasError = false.obs;
   var selectedIndex = 0.obs;
   var bottomNavSelectedIndex = 0.obs;
   var isOnline = true.obs;
+  var name = TextEditingController().obs;
 
   final ScrollController scrollController = ScrollController();
   final RxBool isVisible = true.obs;
-
-  var messages = <ChatMessage>[].obs;
-
-  var lastSeen = DateTime.now().obs;
-  var isTyping = false.obs;
-
-  var textController = TextEditingController().obs;
-
-  void sendMessage(String text) {
-    messages.add(ChatMessage(text: text, isMe: true, time: DateTime.now()));
-    isTyping(false);
-  }
-
-  void receiveMessage(String text) {
-    messages.add(ChatMessage(text: text, isMe: false, time: DateTime.now()));
-  }
 
   @override
   void onInit() {
@@ -102,17 +88,34 @@ class PortfolioController extends GetxController {
     isLoading(false);
   }*/
 
-  // String getFirstLetter(String text) {
-  //   final trimmed = text.trimLeft();
-  //   if (trimmed.isEmpty) return '?';
-  //   return trimmed[0].toUpperCase();
-  // }
-
-  String getFirstLetter(String value) {
-    final trimmed = value.trim();
-
+  String getFirstLetter(String text) {
+    final trimmed = text.trimLeft();
     if (trimmed.isEmpty) return '?';
-
     return trimmed[0].toUpperCase();
+  }
+
+  void addUser({required String fullName}) {
+    AppNavigator().goBack(isBack: true);
+
+    portfolio.value = PortfolioEntity(
+      comments: [
+        ...?portfolio.value?.comments,
+        CommentsEntity(userEntity: UserEntity(fullName: fullName)),
+      ],
+    );
+
+    Get.snackbar(
+      'User added',
+      'User added successfully',
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(12),
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  void openInputDialog() {
+    Get.dialog(AnimatedInputDialog(), barrierDismissible: true);
   }
 }

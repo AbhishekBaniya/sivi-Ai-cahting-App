@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../config/res/colors.dart';
 import '../../../core/network/dio_client.dart';
+import '../../../core/utils/services/presence_services.dart';
 import '../../data/data_source/remote_data_source/portfolio_remote_data_source.dart';
 import '../../data/repositories/portfolio_repository_impl.dart';
 import '../../domain/usecases/get_portfolio.dart';
@@ -55,6 +56,8 @@ class AppBindings extends Bindings {
     Get.lazyPut<PortfolioController>(
       () => PortfolioController(getPortfolio: Get.find<GetPortfolio>()),
     );
+
+    Get.put(PresenceService(), permanent: true);
   }
 
   @override
