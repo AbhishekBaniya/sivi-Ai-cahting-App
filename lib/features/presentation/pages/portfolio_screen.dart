@@ -1,6 +1,7 @@
 import 'package:mini_chat/config/res/dims.dart';
 import 'package:mini_chat/features/presentation/app_routes/app_navigators.dart';
 import 'package:mini_chat/features/presentation/app_routes/app_routes.dart';
+import 'package:mini_chat/features/presentation/controller/chat_history/chat_history_controller.dart';
 import 'package:mini_chat/features/presentation/pages/offers/offers_screen.dart';
 import 'package:mini_chat/features/presentation/pages/settings/settings_screen.dart';
 import 'package:mini_chat/features/presentation/widgets/app_parent_widget.dart';
@@ -17,6 +18,7 @@ class PortfolioScreen extends StatelessWidget {
   PortfolioScreen({super.key});
 
   final controller = Get.put(PortfolioController(getPortfolio: Get.find()));
+  final chatHistoryController = Get.put(ChatHistoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,9 @@ class PortfolioScreen extends StatelessWidget {
                       child: ListView.separated(
                         controller: controller.scrollController,
                         padding: EdgeInsets.all(Dim.doubleZero),
-                        itemCount: comments.length,
+                        itemCount: controller.selectedIndex.value == 0
+                            ? comments.length
+                            : chatHistoryController.chats.value.length,
                         itemBuilder: (context, index) {
                           final item = comments[index];
                           return controller.selectedIndex.value == 0
@@ -83,6 +87,7 @@ class PortfolioScreen extends StatelessWidget {
                                       AppRoutes.chatScreen,
                                       arguments: {
                                         'name': item.userEntity?.fullName ?? '',
+                                        'id': item.userEntity?.id ?? '',
                                       },
                                     );
                                   },
@@ -200,9 +205,22 @@ class PortfolioScreen extends StatelessWidget {
                                   },
                                   behavior: HitTestBehavior.translucent,
                                   child: ChatHistoryScreen(
-                                    name: item.userEntity?.fullName ?? '',
-                                    message: item.body ?? '',
-                                    unreadCount: 1,
+                                    //name: item.userEntity?.fullName ?? '',
+                                    name:
+                                        chatHistoryController
+                                            .chats[index]
+                                            .name ??
+                                        '',
+                                    message:
+                                        chatHistoryController
+                                            .chats[index]
+                                            .lastMessage ??
+                                        '',
+                                    unreadCount:
+                                        chatHistoryController
+                                            .chats[index]
+                                            .unreadCount ??
+                                        0,
                                   ),
                                 );
                         },

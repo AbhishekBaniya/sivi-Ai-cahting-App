@@ -1,3 +1,4 @@
+import 'package:mini_chat/features/presentation/controller/chat_history/chat_history_controller.dart';
 import 'package:mini_chat/features/presentation/widgets/app_text_widget.dart';
 
 import '../../../../config/res/dims.dart';
@@ -13,6 +14,7 @@ class ChatsScreen extends StatelessWidget {
   ChatsScreen({super.key});
 
   final controller = Get.put(ChatController());
+  final chatHistoryController = Get.put(ChatHistoryController());
   final args = Get.arguments;
 
   @override

@@ -1,115 +1,3 @@
-/*class ChatController extends GetxController {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  RxBool isLoading = true.obs;
-  RxBool hasError = false.obs;
-  RxBool isVisible = true.obs;
-
-  RxBool isTyping = false.obs;
-  RxBool isOnline = false.obs;
-  Rx<DateTime> lastSeen = DateTime.now().obs;
-
-  RxList<ChatMessage> messages = <ChatMessage>[].obs;
-  Rx<TextEditingController> textController = TextEditingController().obs;
-
-  late String myId;
-  late String otherId;
-  late String chatId;
-
-  @override
-  void onInit() async {
-    super.onInit();
-    try {
-      myId = await LocalUserService.getId();
-      otherId = 'STATIC_OTHER_USER'; // change later
-      chatId = _chatId(myId, otherId);
-
-      _setOnline(true);
-      _listenMessages();
-      _listenTyping();
-      _listenPresence();
-
-      isLoading(false);
-    } catch (e) {
-      hasError(true);
-      isLoading(false);
-    }
-  }
-
-  String _chatId(String a, String b) =>
-      a.compareTo(b) < 0 ? '${a}_$b' : '${b}_$a';
-
-  // SEND MESSAGE
-  Future<void> sendMessage(String text) async {
-    if (text.trim().isEmpty) return;
-
-    await firestore.collection('messages').doc(chatId).collection('chat').add({
-      'senderId': myId,
-      'text': text.trim(),
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
-
-  // LISTEN MESSAGES
-  void _listenMessages() {
-    firestore
-        .collection('messages')
-        .doc(chatId)
-        .collection('chat')
-        .orderBy('timestamp')
-        .snapshots()
-        .listen((snapshot) {
-          messages.value = snapshot.docs.map((doc) {
-            final data = doc.data();
-            return ChatMessage(
-              text: data['text'],
-              isMe: data['senderId'] == myId,
-              time:
-                  (data['timestamp'] as Timestamp?)?.toDate() ?? DateTime.now(),
-            );
-          }).toList();
-        });
-  }
-
-  // TYPING
-  void setTyping(bool value) {
-    firestore.collection('typing').doc(chatId).set({
-      myId: value,
-    }, SetOptions(merge: true));
-  }
-
-  void _listenTyping() {
-    firestore.collection('typing').doc(chatId).snapshots().listen((doc) {
-      final data = doc.data();
-      if (data == null) return;
-      isTyping.value = data[otherId] == true;
-    });
-  }
-
-  // ONLINE / LAST SEEN
-  void _setOnline(bool value) {
-    firestore.collection('users').doc(myId).set({
-      'isOnline': value,
-      'lastSeen': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-  }
-
-  void _listenPresence() {
-    firestore.collection('users').doc(otherId).snapshots().listen((doc) {
-      if (!doc.exists) return;
-      final data = doc.data()!;
-      isOnline.value = data['isOnline'] ?? false;
-      lastSeen.value =
-          (data['lastSeen'] as Timestamp?)?.toDate() ?? DateTime.now();
-    });
-  }
-
-  @override
-  void onClose() {
-    _setOnline(false);
-    super.onClose();
-  }
-}*/
 import 'dart:async';
 import 'dart:math';
 
@@ -117,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/model/chat_model.dart';
+import '../chat_history/chat_history_controller.dart';
 
 class ChatController extends GetxController {
+  final args = Get.arguments;
+  final chatHistoryController = Get.put(ChatHistoryController());
   RxBool isLoading = true.obs;
   RxBool hasError = false.obs;
   RxBool isVisible = true.obs;
@@ -211,6 +102,14 @@ class ChatController extends GetxController {
       }
     }
 
+    chatHistoryController.addOrUpdateChat(
+      chatId: args['id'].toString() ?? '0', // or item.id if available
+      name: args['name'] ?? '',
+      message: messages.last.text,
+      time: messages.last.time.toString(),
+      unreadCount: messages.length,
+    );
+
     /// fallback (no keyword matched)
     return _autoReplies[Random().nextInt(_autoReplies.length)];
   }
@@ -230,6 +129,13 @@ class ChatController extends GetxController {
     );
 
     isTyping.value = false;
+    chatHistoryController.addOrUpdateChat(
+      chatId: args['id'].toString() ?? '0', // or item.id if available
+      name: args['name'] ?? '',
+      message: messages.last.text,
+      time: messages.last.time.toString(),
+      unreadCount: messages.length,
+    );
   }
 
   @override

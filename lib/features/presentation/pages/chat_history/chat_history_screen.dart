@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../config/res/dims.dart';
@@ -19,7 +18,6 @@ class ChatHistoryScreen extends StatelessWidget {
   });
 
   final controller = Get.put(ChatHistoryController());
-  final now = FieldValue.serverTimestamp();
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +60,7 @@ class ChatHistoryScreen extends StatelessWidget {
           // Name & message
           Expanded(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppRichTextWidget().buildComplexRichText(
@@ -98,6 +97,7 @@ class ChatHistoryScreen extends StatelessWidget {
 
           // Time & unread badge
           Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
